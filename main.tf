@@ -7,7 +7,7 @@ resource "konnect_gateway_service" "Kassongo_service" {
   name             = "Kassongo_service"
   port             = 443
   protocol         = "https"
-  read_timeout     = 30
+  read_timeout     = 40
   retries          = 3
   tags = [
     "..."
