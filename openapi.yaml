@@ -1,0 +1,196 @@
+openapi: 3.0.1
+info:
+  title: SeaRed Countries
+  description: This API will be used to identify which booking is eligible to the sea program.
+ 
+  version: 1.0.0
+  x-hopex: 
+    - componentCode: IS06051
+servers:
+- url: /seare/experience/ecommerce/v1                    
+
+tags:
+  - name: SeaReward Excluded Countries
+    description: Retrieve 
+paths:
+
+  /excludedCountries:
+    get:          
+      tags:
+       - SeaReward Excluded Countries
+      summary: Get list of countries code
+      description: This method will allow to retrieve all the excluded countries from the SeaReward program
+      operationId: getAllExcludedCountries
+      parameters: 
+        - name: range
+          in: header
+          schema:
+            type: string
+            default: 0-49
+          description: Pagination parameter. default 0-49. Maximum rows to return 50
+
+      responses:
+        "200":
+          description: Successful Operation
+          headers:
+            Content-Range:
+              description: Returned range.
+              schema:
+                type: string
+            Accept-Range:
+              description: Max accepted range.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  description: list of country code excluded from SeaReward program
+                  example: FR , AU
+
+                    
+        "206":
+          description: Successful Operation but partial content
+          headers:
+            Content-Range:
+              description: Returned range.
+              schema:
+                type: string
+            Accept-Range:
+              description: Max accepted range.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  description: list of country code excluded from SeaReward program
+                  example: FR
+        "400":
+          description: Hereunder fault datatype description<br> Reason - 400 Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fault'
+        "416":
+            description: hereunder fault datatype description<br> Reason - 416 Range Not Satisfiable<br>
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Fault'
+        "500":
+          description: 
+            Hereunder fault datatype description<br> Reason - 500 Internal
+            error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fault'
+      security:
+        - oAuthFe:
+          - 'searewardeligibility:read:fe'
+        - oAuthBe:
+          - 'searewardeligibility:read:be'
+  /countries/{countryCode}/check:
+    get:
+      tags: 
+        - SeaReward Excluded Countries 
+      summary: Check if a country is excluded from eligibility
+      description: This method will allow to know if a country is excluded from the SeaReward program
+      operationId: getCountrySearewardStatus
+      parameters:
+        - name: countryCode
+          in: path
+          description: Country code in CMA CGM format
+          required: true
+          schema:
+            type: string
+            example: "FR"
+      responses:
+        "200":
+          description: Successful Operation
+          headers:
+            Content-Range:
+              description: Returned range.
+              schema:
+                type: string
+            Accept-Range:
+              description: Max accepted range.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: 
+                  excluded:
+                    example: true
+                    type: boolean
+                    description: If the status is true it means that the country is excluded from the SeaReward program
+        "400":
+          description: Hereunder fault datatype description<br> Reason - 400 Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fault'
+        "404":
+          description: Hereunder fault datatype description<br> Reason - 400 Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fault'
+        "500":
+          description: 
+            Hereunder fault datatype description<br> Reason - 500 Internal
+            error<br> Code - PAR_ERR Description - Operational service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fault'
+      security:
+        - oAuthFe:
+          - 'searewardeligibility:read:fe'
+        - oAuthBe:
+          - 'searewardeligibility:read:be'
+
+components:
+  schemas:
+    Fault:
+        type: object
+        properties:
+          reason:
+            type: string
+            description: 
+              HTTP error or Free text such as Database Not Available, Invalid
+              Credential, Mandatory, Invalid Format,  Invalid Length,
+              ForbiddenValue, Invalid Data,...
+            example: 'Country Not Found'
+          code:
+            type: string
+            description: Error Id,  Server Application error ID, Oracle error Id, ...
+            example: 'COUNTRY_ERR'
+          description:
+            type: string
+            description: Human-readable error description including Data and Value
+            example: 'No country with this code'
+            
+  securitySchemes:
+    oAuthBe:
+      type: oauth2
+      flows: 
+        clientCredentials:
+          tokenUrl:  https://auth.com/as/token.oauth2
+          scopes:
+            searewardeligibility:read:be: read permission
+    oAuthFe:
+      type: oauth2
+      flows: 
+        authorizationCode:
+          tokenUrl:  https://auth.fma.com/as/token.oauth2
+          authorizationUrl: 'https://auth.fma.com/as/authorization.oauth2'
+          scopes:
+            searewardeligibility:read:fe: read permission
