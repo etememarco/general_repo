@@ -14,7 +14,7 @@ resource "konnect_gateway_service" "Kassongo_service" {
   ]
   # tls_verify       = true
   # tls_verify_depth = 8
-  write_timeout    = 60000
+  write_timeout = 60000
 }
 
 resource "konnect_gateway_route" "Kassongo_route" {
@@ -50,47 +50,47 @@ resource "konnect_gateway_route" "Kassongo_route" {
 
 resource "konnect_gateway_service" "mocky_service" {
   connect_timeout  = 9
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"  
-  name     = "mocky_service"
-  host     = "run.mocky.io"
-  protocol = "https"
-  port     = 443
-  tls_verify = true
-  read_timeout    = 30
-  write_timeout   = 10
+  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  name             = "mocky_service"
+  host             = "run.mocky.io"
+  protocol         = "https"
+  port             = 443
+  tls_verify       = true
+  read_timeout     = 30
+  write_timeout    = 10
 }
 
 resource "konnect_gateway_route" "mocky_route" {
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  name          = "mocky_route"
-  service       = { id = konnect_gateway_service.mocky_service.id }
-  hosts         = ["mocky"]
-  paths         = ["/anything"]
-  protocols     = ["http","https"]
-  strip_path    = true
-  preserve_host = false
-}
-
-resource "konnect_gateway_service" "echo_service" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  name     = "echo_service"
-  host     = "postman-echo.com"
-  protocol = "https"
-  port     = 443
-  tls_verify = true
-}
-
-# Route exposée publiquement
-resource "konnect_gateway_route" "echo_route" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  name             = "echo_route"
-  service       = { id = konnect_gateway_service.echo_service.id }
+  name             = "mocky_route"
+  service          = { id = konnect_gateway_service.mocky_service.id }
+  hosts            = ["mocky"]
   paths            = ["/anything"]
   protocols        = ["http", "https"]
   strip_path       = true
   preserve_host    = false
+}
+
+resource "konnect_gateway_service" "echo_service" {
+  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  name             = "echo_service"
+  host             = "postman-echo.com"
+  protocol         = "https"
+  port             = 443
+  tls_verify       = true
+}
+
+# Route exposée publiquement
+resource "konnect_gateway_route" "echo_route" {
+  control_plane_id           = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  name                       = "echo_route"
+  service                    = { id = konnect_gateway_service.echo_service.id }
+  paths                      = ["/anything"]
+  protocols                  = ["http", "https"]
+  strip_path                 = true
+  preserve_host              = false
   https_redirect_status_code = 307
-  hosts            = ["echo.com"]
+  hosts                      = ["echo.com"]
 }
 
 
@@ -99,7 +99,7 @@ resource "konnect_gateway_service" "httpbun" {
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
   created_at       = 10
   enabled          = true
-  host             = "httpbun.com"
+  host             = "httpbun"
   name             = "httpbun"
   port             = 443
   protocol         = "https"
@@ -110,7 +110,7 @@ resource "konnect_gateway_service" "httpbun" {
   ]
   # tls_verify       = true
   # tls_verify_depth = 8
-  write_timeout    = 60000
+  write_timeout = 60000
 }
 
 resource "konnect_gateway_route" "payload" {
@@ -203,9 +203,10 @@ resource "konnect_gateway_route" "mix" {
   ]
 }
 resource "konnect_gateway_upstream" "httpbun" {
-  algorithm = "round-robin"
-  hash_fallback = "none"
-  hash_on = "none"
+  algorithm           = "round-robin"
+  host_header         = "httpbun.com"
+  hash_fallback       = "none"
+  hash_on             = "none"
   hash_on_cookie_path = "/"
   healthchecks = {
     active = {
@@ -215,13 +216,13 @@ resource "konnect_gateway_upstream" "httpbun" {
           200,
           302
         ]
-        interval = 0
+        interval  = 0
         successes = 0
       }
-      http_path = "/"
+      http_path                = "/"
       https_verify_certificate = true
-      timeout = 1
-      type = "http"
+      timeout                  = 1
+      type                     = "http"
       unhealthy = {
         http_failures = 0
         http_statuses = [
@@ -234,9 +235,9 @@ resource "konnect_gateway_upstream" "httpbun" {
           504,
           505
         ]
-        interval = 0
+        interval     = 0
         tcp_failures = 0
-        timeouts = 0
+        timeouts     = 0
       }
     }
     passive = {
@@ -273,23 +274,23 @@ resource "konnect_gateway_upstream" "httpbun" {
           503
         ]
         tcp_failures = 0
-        timeouts = 0
+        timeouts     = 0
       }
     }
     threshold = 0
   }
-  name = "httpbun.com"
-  slots = 10000
+  name                        = "httpbun"
+  slots                       = 10000
   sticky_sessions_cookie_path = "/"
-  use_srv_name = false
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  use_srv_name                = false
+  control_plane_id            = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
 }
 
 
 resource "konnect_gateway_upstream" "httpbin" {
-  algorithm = "round-robin"
-  hash_fallback = "none"
-  hash_on = "none"
+  algorithm           = "round-robin"
+  hash_fallback       = "none"
+  hash_on             = "none"
   hash_on_cookie_path = "/"
   healthchecks = {
     active = {
@@ -299,13 +300,13 @@ resource "konnect_gateway_upstream" "httpbin" {
           200,
           302
         ]
-        interval = 0
+        interval  = 0
         successes = 0
       }
-      http_path = "/"
+      http_path                = "/"
       https_verify_certificate = true
-      timeout = 1
-      type = "http"
+      timeout                  = 1
+      type                     = "http"
       unhealthy = {
         http_failures = 0
         http_statuses = [
@@ -318,9 +319,9 @@ resource "konnect_gateway_upstream" "httpbin" {
           504,
           505
         ]
-        interval = 0
+        interval     = 0
         tcp_failures = 0
-        timeouts = 0
+        timeouts     = 0
       }
     }
     passive = {
@@ -357,15 +358,15 @@ resource "konnect_gateway_upstream" "httpbin" {
           503
         ]
         tcp_failures = 0
-        timeouts = 0
+        timeouts     = 0
       }
     }
     threshold = 0
   }
-  host_header = "httpbin.konghq.com"
-  name = "httpbin"
-  slots = 10000
+  host_header                 = "httpbin.konghq.com"
+  name                        = "httpbin"
+  slots                       = 10000
   sticky_sessions_cookie_path = "/"
-  use_srv_name = false
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  use_srv_name                = false
+  control_plane_id            = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
 }

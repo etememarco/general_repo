@@ -1,9 +1,9 @@
 resource "konnect_gateway_plugin_key_auth" "gateway_plugin_keyauth" {
   config = {
     hide_credentials = false
-    key_in_body   = false
-    key_in_header = false
-    key_in_query  = true
+    key_in_body      = false
+    key_in_header    = false
+    key_in_query     = true
     key_names = [
       "key-auth"
     ]
@@ -11,7 +11,6 @@ resource "konnect_gateway_plugin_key_auth" "gateway_plugin_keyauth" {
     run_on_preflight = false
   }
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  created_at       = 5
   enabled          = false
   instance_name    = "key-auth"
   protocols = [
@@ -40,10 +39,9 @@ resource "konnect_gateway_plugin_rate_limiting" "gateway_plugin_rate_limiting" {
     limit_by            = "ip"
     minute              = 1
     month               = 1
-    # path                = "...my_path..."
     policy              = "local"
-    second    = 1
-    year      = 1
+    second              = 1
+    year                = 1
   }
 
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
