@@ -1,5 +1,5 @@
 resource "konnect_gateway_service" "Kassongo_service" {
-  connect_timeout  = 10
+  connect_timeout  = 60000
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
   created_at       = 10
   enabled          = true
@@ -7,14 +7,14 @@ resource "konnect_gateway_service" "Kassongo_service" {
   name             = "Kassongo_service"
   port             = 443
   protocol         = "https"
-  read_timeout     = 40
-  retries          = 3
+  read_timeout     = 60000
+  retries          = 5
   tags = [
-    "..."
+    "env: uat"
   ]
-  tls_verify       = true
-  tls_verify_depth = 8
-  write_timeout    = 10
+  # tls_verify       = true
+  # tls_verify_depth = 8
+  write_timeout    = 60000
 }
 
 resource "konnect_gateway_route" "Kassongo_route" {
@@ -37,13 +37,13 @@ resource "konnect_gateway_route" "Kassongo_route" {
   ]
   regex_priority     = 9
   request_buffering  = true
-  response_buffering = false
+  response_buffering = true
   service = {
     id = "d1c2d6a0-8eb8-4cf8-97d1-81c9d28c1ff9"
   }
   strip_path = true
   tags = [
-    "..."
+    "env: uat"
   ]
 }
 
@@ -93,3 +93,112 @@ resource "konnect_gateway_route" "echo_route" {
   hosts            = ["echo.com"]
 }
 
+
+resource "konnect_gateway_service" "httpbun" {
+  connect_timeout  = 60000
+  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  created_at       = 10
+  enabled          = true
+  host             = "httpbun.com"
+  name             = "httpbun"
+  port             = 443
+  protocol         = "https"
+  read_timeout     = 60000
+  retries          = 5
+  tags = [
+    "env: uat"
+  ]
+  # tls_verify       = true
+  # tls_verify_depth = 8
+  write_timeout    = 60000
+}
+
+resource "konnect_gateway_route" "payload" {
+  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  hosts = [
+    "kong.com"
+  ]
+  https_redirect_status_code = 307
+  methods = [
+    "GET",
+  ]
+  name          = "payload"
+  path_handling = "v0"
+  paths = [
+    "/payload"
+  ]
+  preserve_host = false
+  protocols = [
+    "http", "https"
+  ]
+  regex_priority     = 9
+  request_buffering  = true
+  response_buffering = true
+  service = {
+    id = "c61de38a-d659-4fda-a42e-23554437f0b7"
+  }
+  strip_path = true
+  tags = [
+    "env: uat"
+  ]
+}
+
+resource "konnect_gateway_route" "run" {
+  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  hosts = [
+    "kong.com"
+  ]
+  https_redirect_status_code = 307
+  methods = [
+    "GET",
+  ]
+  name          = "run"
+  path_handling = "v0"
+  paths = [
+    "/run"
+  ]
+  preserve_host = false
+  protocols = [
+    "http", "https"
+  ]
+  regex_priority     = 9
+  request_buffering  = true
+  response_buffering = true
+  service = {
+    id = "c61de38a-d659-4fda-a42e-23554437f0b7"
+  }
+  strip_path = true
+  tags = [
+    "env: uat"
+  ]
+}
+
+resource "konnect_gateway_route" "mix" {
+  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  hosts = [
+    "kong.com"
+  ]
+  https_redirect_status_code = 307
+  methods = [
+    "GET",
+  ]
+  name          = "mix"
+  path_handling = "v0"
+  paths = [
+    "/mix"
+  ]
+  preserve_host = false
+  protocols = [
+    "http", "https"
+  ]
+  regex_priority     = 9
+  request_buffering  = true
+  response_buffering = true
+  service = {
+    id = "c61de38a-d659-4fda-a42e-23554437f0b7"
+  }
+  strip_path = true
+  tags = [
+    "env: uat"
+  ]
+}
