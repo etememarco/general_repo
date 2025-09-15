@@ -202,3 +202,170 @@ resource "konnect_gateway_route" "mix" {
     "env: uat"
   ]
 }
+resource "konnect_gateway_upstream" "httpbun" {
+  algorithm = "round-robin"
+  hash_fallback = "none"
+  hash_on = "none"
+  hash_on_cookie_path = "/"
+  healthchecks = {
+    active = {
+      concurrency = 10
+      healthy = {
+        http_statuses = [
+          200,
+          302
+        ]
+        interval = 0
+        successes = 0
+      }
+      http_path = "/"
+      https_verify_certificate = true
+      timeout = 1
+      type = "http"
+      unhealthy = {
+        http_failures = 0
+        http_statuses = [
+          429,
+          404,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505
+        ]
+        interval = 0
+        tcp_failures = 0
+        timeouts = 0
+      }
+    }
+    passive = {
+      healthy = {
+        http_statuses = [
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308
+        ]
+        successes = 0
+      }
+      type = "http"
+      unhealthy = {
+        http_failures = 0
+        http_statuses = [
+          429,
+          500,
+          503
+        ]
+        tcp_failures = 0
+        timeouts = 0
+      }
+    }
+    threshold = 0
+  }
+  name = "httpbun.com"
+  slots = 10000
+  sticky_sessions_cookie_path = "/"
+  use_srv_name = false
+  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+}
+
+
+resource "konnect_gateway_upstream" "httpbin" {
+  algorithm = "round-robin"
+  hash_fallback = "none"
+  hash_on = "none"
+  hash_on_cookie_path = "/"
+  healthchecks = {
+    active = {
+      concurrency = 10
+      healthy = {
+        http_statuses = [
+          200,
+          302
+        ]
+        interval = 0
+        successes = 0
+      }
+      http_path = "/"
+      https_verify_certificate = true
+      timeout = 1
+      type = "http"
+      unhealthy = {
+        http_failures = 0
+        http_statuses = [
+          429,
+          404,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505
+        ]
+        interval = 0
+        tcp_failures = 0
+        timeouts = 0
+      }
+    }
+    passive = {
+      healthy = {
+        http_statuses = [
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308
+        ]
+        successes = 0
+      }
+      type = "http"
+      unhealthy = {
+        http_failures = 0
+        http_statuses = [
+          429,
+          500,
+          503
+        ]
+        tcp_failures = 0
+        timeouts = 0
+      }
+    }
+    threshold = 0
+  }
+  host_header = "httpbin.konghq.com"
+  name = "httpbin"
+  slots = 10000
+  sticky_sessions_cookie_path = "/"
+  use_srv_name = false
+  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+}
