@@ -7,18 +7,14 @@ resource "konnect_gateway_plugin_key_auth" "gateway_plugin_keyauth" {
     key_names = [
       "key-auth"
     ]
-    realm            = "my_realm"
     run_on_preflight = false
   }
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  enabled          = false
+  enabled          = true
   instance_name    = "key-auth"
   protocols = [
     "https"
   ]
-  route = {
-    id = konnect_gateway_route.Kassongo_route.id
-  }
   service = {
     id = konnect_gateway_service.Kassongo_service.id
   }
