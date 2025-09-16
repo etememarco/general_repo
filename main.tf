@@ -47,30 +47,6 @@ resource "konnect_gateway_route" "Kassongo_route" {
   ]
 }
 
-
-resource "konnect_gateway_service" "mocky_service" {
-  connect_timeout  = 9
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  name             = "mocky_service"
-  host             = "run.mocky.io"
-  protocol         = "https"
-  port             = 443
-  tls_verify       = true
-  read_timeout     = 30
-  write_timeout    = 10
-}
-
-resource "konnect_gateway_route" "mocky_route" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  name             = "mocky_route"
-  service          = { id = konnect_gateway_service.mocky_service.id }
-  hosts            = ["mocky"]
-  paths            = ["/anything"]
-  protocols        = ["http", "https"]
-  strip_path       = true
-  preserve_host    = false
-}
-
 resource "konnect_gateway_service" "echo_service" {
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
   name             = "echo_service"

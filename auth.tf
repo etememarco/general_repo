@@ -1,12 +1,12 @@
-resource "konnect_gateway_basic_auth" "basicauth" {
-  consumer_id      = "c06c1f38-cd46-4669-bfa3-75e3417423db"
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  password         = "Kass_10!"
-  tags = [
-    "env: uat"
-  ]
-  username = "Kassongo"
-}
+# resource "konnect_gateway_basic_auth" "basicauth" {
+#   consumer_id      = "c06c1f38-cd46-4669-bfa3-75e3417423db"
+#   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+#   password         = "Kass_10!"
+#   tags = [
+#     "env: uat"
+#   ]
+#   username = "Kassongo"
+# }
 
 resource "konnect_gateway_basic_auth" "demo_user_auth" {
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
