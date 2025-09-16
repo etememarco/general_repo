@@ -10,7 +10,7 @@ resource "konnect_gateway_plugin_key_auth" "gateway_plugin_keyauth" {
     run_on_preflight = false
   }
   control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  enabled          = true
+  enabled          = false
   instance_name    = "key-auth"
   protocols = [
     "https"
