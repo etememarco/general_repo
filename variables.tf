@@ -1,17 +1,62 @@
-variable "konnect_pat" {
-  description = "Personal Access Token pour Kong Konnect"
-  type        = string
-  default     = "kpat_Y6JWSi0RuOu6R0YWZZvQ7s6rhrFSyp5Pdn11NdnmeDegKjN3v"
+variable "konnect_personal_access_token" {
+  type      = string
+  sensitive = true
 }
 
-variable "consumer_username" {
-  description = "Nom du consumer pour Basic Auth"
-  type        = string
-  default     = "demo-user"
-}
+
 
 variable "control_plane_id" {
-  description = "Nom du consumer pour Basic Auth"
-  type        = string
-  default     = "demo-user"
+  type      = string
+  sensitive = true
 }
+
+variable "consumer_kassongo_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "consumer_demouser_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "consumer_katika_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "consumer_atalaku_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "kassongo_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "demouser_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "katika_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "atalaku_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "kassongo_service_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "httpbun_id" {
+  type      = string
+  sensitive = true
+}
+

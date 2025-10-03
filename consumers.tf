@@ -1,20 +1,34 @@
-resource "konnect_gateway_consumer" "kassongo_consumer" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+resource "konnect_gateway_consumer" "kassongo_user" {
+  control_plane_id = var.control_plane_id
   tags = [
     "env: uat"
   ]
   username = "Kassongo"
 }
 
-resource "konnect_gateway_consumer_group" "kassongo_group" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  name             = "kassongo_group"
+resource "konnect_gateway_consumer" "demouser" {
+  control_plane_id = var.control_plane_id
+  username         = "demo-user"
   tags = [
     "env: uat"
   ]
 }
 
-resource "konnect_gateway_consumer" "demo_user" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  username         = "demo-user"
+
+resource "konnect_gateway_consumer" "katika" {
+  control_plane_id = var.control_plane_id
+  username         = "katika"
+  tags = [
+    "env: uat"
+  ]
 }
+
+resource "konnect_gateway_consumer" "atalaku" {
+  control_plane_id = var.control_plane_id
+  username         = "atalaku"
+  tags = [
+    "env: uat"
+  ]
+}
+
+
