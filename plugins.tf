@@ -9,7 +9,7 @@ resource "konnect_gateway_plugin_key_auth" "gateway_plugin_keyauth" {
     ]
     run_on_preflight = false
   }
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   enabled          = false
   instance_name    = "key-auth"
   protocols = [
@@ -34,7 +34,7 @@ resource "konnect_gateway_plugin_rate_limiting_advanced" "gateway_plugin_rate_li
     hide_client_headers = false
   }
 
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   enabled          = true
   instance_name    = "rate_limiting_advanced"
 
@@ -57,7 +57,7 @@ resource "konnect_gateway_plugin_rate_limiting_advanced" "gateway_plugin_rate_li
     hide_client_headers = false
   }
 
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   enabled          = true
   instance_name    = "rate_limiting_advanced_httpbun"
 
@@ -70,7 +70,7 @@ resource "konnect_gateway_plugin_rate_limiting_advanced" "gateway_plugin_rate_li
 
 
 resource "konnect_gateway_plugin_basic_auth" "basicauth" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   created_at       = 6
   enabled          = true
   instance_name    = "httpbun_basic_auth"
@@ -111,8 +111,11 @@ resource "konnect_gateway_plugin_acl" "kassongo_acl" {
     "http",
     "https"
   ]
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   service          = { id = konnect_gateway_service.Kassongo_service.id }
+  tags = [
+    "env: uat"
+  ]
 }
 
 
@@ -133,8 +136,11 @@ resource "konnect_gateway_plugin_acl" "paiya_acl" {
     "http",
     "https"
   ]
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   service          = { id = konnect_gateway_service.httpbun.id }
+  tags = [
+    "env: uat"
+  ]
 }
 
 
@@ -143,7 +149,7 @@ resource "konnect_gateway_plugin_proxy_cache_advanced" "proxy_cache_advanced" {
   config = {
     bypass_on_err = false
     cache_control = false
-    cache_ttl = 300
+    cache_ttl     = 300
     content_type = [
       "text/plain",
       "application/json"
@@ -154,17 +160,17 @@ resource "konnect_gateway_plugin_proxy_cache_advanced" "proxy_cache_advanced" {
     }
     redis = {
       cluster_max_redirections = 5
-      connect_timeout = 2000
-      connection_is_proxied = false
-      database = 0
-      host = "httpbin.org"
-      keepalive_pool_size = 256
-      port = 6379
-      read_timeout = 2000
-      send_timeout = 2000
-      ssl = false
-      ssl_verify = false
-      timeout = 2000
+      connect_timeout          = 2000
+      connection_is_proxied    = false
+      database                 = 0
+      host                     = "httpbin.org"
+      keepalive_pool_size      = 256
+      port                     = 6379
+      read_timeout             = 2000
+      send_timeout             = 2000
+      ssl                      = false
+      ssl_verify               = false
+      timeout                  = 2000
     }
     request_method = [
       "GET",
@@ -175,9 +181,9 @@ resource "konnect_gateway_plugin_proxy_cache_advanced" "proxy_cache_advanced" {
       404
     ]
     response_headers = {
-      X-Cache-Key = true
+      X-Cache-Key    = true
       X-Cache-Status = true
-      age = true
+      age            = true
     }
     strategy = "memory"
   }
@@ -188,7 +194,7 @@ resource "konnect_gateway_plugin_proxy_cache_advanced" "proxy_cache_advanced" {
     "http",
     "https"
   ]
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   service          = { id = konnect_gateway_service.Kassongo_service.id }
   tags = [
     "env: uat"

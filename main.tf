@@ -1,6 +1,6 @@
 resource "konnect_gateway_service" "Kassongo_service" {
   connect_timeout  = 60000
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   created_at       = 10
   enabled          = true
   host             = "httpbin.org"
@@ -17,8 +17,8 @@ resource "konnect_gateway_service" "Kassongo_service" {
   write_timeout = 60000
 }
 
-resource "konnect_gateway_route" "Kassongo_route" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+resource "konnect_gateway_route" "Kassongo_route_anything" {
+  control_plane_id = var.control_plane_id
   hosts = [
     "example.com"
   ]
@@ -39,40 +39,49 @@ resource "konnect_gateway_route" "Kassongo_route" {
   request_buffering  = true
   response_buffering = true
   service = {
-    id = "d1c2d6a0-8eb8-4cf8-97d1-81c9d28c1ff9"
+    id = var.kassongo_service_id
   }
-  strip_path = true
+
+  strip_path          = true
   tags = [
     "env: uat"
   ]
 }
 
-resource "konnect_gateway_service" "echo_service" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  name             = "echo_service"
-  host             = "postman-echo.com"
-  protocol         = "https"
-  port             = 443
-  tls_verify       = true
-}
-
-# Route exposée publiquement
-resource "konnect_gateway_route" "echo_route" {
-  control_plane_id           = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
-  name                       = "echo_route"
-  service                    = { id = konnect_gateway_service.echo_service.id }
-  paths                      = ["/anything"]
-  protocols                  = ["http", "https"]
-  strip_path                 = true
-  preserve_host              = false
+resource "konnect_gateway_route" "Kassongo_route_bearer" {
+  control_plane_id = var.control_plane_id
+  hosts = [
+    "example.com"
+  ]
   https_redirect_status_code = 307
-  hosts                      = ["echo.com"]
+  methods = [
+    "GET",
+  ]
+  name          = "kassongo_bearer"
+  path_handling = "v0"
+  paths = [
+    "/bearer"
+  ]
+  preserve_host = false
+  protocols = [
+    "http", "https"
+  ]
+  regex_priority      = 9
+  request_buffering   = true
+  response_buffering  = true
+  service = {
+    id = var.kassongo_service_id
+  }
+  strip_path          = true
+  tags = [
+    "env: uat"
+  ]
 }
 
 
 resource "konnect_gateway_service" "httpbun" {
   connect_timeout  = 60000
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   created_at       = 10
   enabled          = true
   host             = "httpbun"
@@ -90,7 +99,7 @@ resource "konnect_gateway_service" "httpbun" {
 }
 
 resource "konnect_gateway_route" "payload" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   hosts = [
     "kong.com"
   ]
@@ -111,7 +120,7 @@ resource "konnect_gateway_route" "payload" {
   request_buffering  = true
   response_buffering = true
   service = {
-    id = "c61de38a-d659-4fda-a42e-23554437f0b7"
+    id = var.httpbun_id
   }
   strip_path = true
   tags = [
@@ -120,7 +129,7 @@ resource "konnect_gateway_route" "payload" {
 }
 
 resource "konnect_gateway_route" "run" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   hosts = [
     "kong.com"
   ]
@@ -141,7 +150,7 @@ resource "konnect_gateway_route" "run" {
   request_buffering  = true
   response_buffering = true
   service = {
-    id = "c61de38a-d659-4fda-a42e-23554437f0b7"
+    id = var.httpbun_id
   }
   strip_path = true
   tags = [
@@ -150,7 +159,7 @@ resource "konnect_gateway_route" "run" {
 }
 
 resource "konnect_gateway_route" "mix" {
-  control_plane_id = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id = var.control_plane_id
   hosts = [
     "kong.com"
   ]
@@ -171,7 +180,7 @@ resource "konnect_gateway_route" "mix" {
   request_buffering  = true
   response_buffering = true
   service = {
-    id = "c61de38a-d659-4fda-a42e-23554437f0b7"
+    id = var.httpbun_id
   }
   strip_path = true
   tags = [
@@ -259,7 +268,7 @@ resource "konnect_gateway_upstream" "httpbun" {
   slots                       = 10000
   sticky_sessions_cookie_path = "/"
   use_srv_name                = false
-  control_plane_id            = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id            = var.control_plane_id
 }
 
 
@@ -344,5 +353,5 @@ resource "konnect_gateway_upstream" "httpbin" {
   slots                       = 10000
   sticky_sessions_cookie_path = "/"
   use_srv_name                = false
-  control_plane_id            = "0caf752c-a73a-47fe-b0c7-e5ae03abe5cc"
+  control_plane_id            = var.control_plane_id
 }
