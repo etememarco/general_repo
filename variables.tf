@@ -60,3 +60,25 @@ variable "httpbun_id" {
   sensitive = true
 }
 
+variable "client_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "client_secret" {
+  type      = string
+  sensitive = true
+}
+
+variable "issuer" {
+  type      = string
+  sensitive = true
+}
+
+
+variable "cache_tokens_salt" {
+  type      = string
+  sensitive = true
+}
+
+
