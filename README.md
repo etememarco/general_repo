@@ -54,34 +54,32 @@ Accès réseau aux services exposés par Kong
 
 Variables d’environnement configurées pour Terraform en local :
 
-export TF_VAR_konnect_personal_access_token="votre_token"
-export TF_VAR_control_plane_id="votre_control_plane_id"
+- export TF_VAR_konnect_personal_access_token="votre_token"
+- export TF_VAR_control_plane_id="votre_control_plane_id"
 
 
 3️⃣ ***Variables Terraform***
 
-Pour sécuriser les identifiants et mots de passe, utilisez des variables sensibles :
+Pour sécuriser les identifiants et mots de passe, il faut utiliser des variables sensibles sous cette forme  :
 
-variable "konnect_personal_access_token" { type = string, sensitive = true }
-variable "control_plane_id" { type = string, sensitive = true }
+variable "client_id" {
+  type      = string
+  sensitive = true
+}
 
-variable "consumer_kassongo_id" { type = string, sensitive = true }
-variable "consumer_demouser_id" { type = string, sensitive = true }
-variable "consumer_katika_id" { type = string, sensitive = true }
-variable "consumer_atalaku_id" { type = string, sensitive = true }
-
-variable "kassongo_password" { type = string, sensitive = true }
-variable "demouser_password" { type = string, sensitive = true }
-variable "katika_password" { type = string, sensitive = true }
-variable "atalaku_password" { type = string, sensitive = true }
+variable "client_secret" {
+  type      = string
+  sensitive = true
+}
 
 
-Ces variables permettent de masquer vos secrets dans Terraform et Git.
+
+Ces variables permettent de masquer les secrets dans Terraform et Git.
 
 
 4️⃣ ***Déploiement des Services***
 
-Les services représentent vos APIs backend exposées par Kong.
+Les services représentent les APIs backend exposées par Kong.
 
 Exemple : Service Kassongo
 resource "konnect_gateway_service" "Kassongo_service" {
@@ -116,7 +114,7 @@ resource "konnect_gateway_service" "httpbun" {
 
 5️⃣ ***Déploiement des Routes***
 
-Les routes définissent comment les requêtes HTTP/HTTPS sont acheminées vers vos services.
+Les routes définissent comment les requêtes HTTP/HTTPS sont acheminées vers les services.
 
 resource "konnect_gateway_route" "Kassongo_route_anything" {
   control_plane_id = var.control_plane_id
@@ -241,17 +239,17 @@ resource "konnect_gateway_plugin_openid_connect" "openid_connect" {
 
 9️⃣ ***Bonnes pratiques***
 
-Stockez les secrets dans des variables Terraform.
+- Stockez les secrets dans des variables Terraform.
 
-Versionnez vos fichiers dans Git pour garantir la traçabilité.
+- Versionnez vos fichiers dans Git pour garantir la traçabilité.
 
-Testez d’abord sur un environnement UAT.
+- Testez d’abord sur un environnement UAT.
 
-Organisez services, consumers et plugins par environnement (uat, prod).
+- Organisez services, consumers et plugins par environnement (uat, prod).
 
-Activez uniquement les plugins nécessaires pour optimiser les performances.
-<<<<<<< HEAD
-=======
+- Activez uniquement les plugins nécessaires pour optimiser les performances.
 
-Toujours garder le Terraform state hors du repo git distant pour éviter d'exposer les valeurs sensibles
->>>>>>> 703e47d (updates)
+- Toujours garder le Terraform state hors du repo git distant pour éviter d'exposer les valeurs sensibles => commandes pour les supprimer sur github mais les garder en local : 
+git rm --cached terraform.tfstate
+git rm --cached terraform.tfstate.backup
+
