@@ -1,7 +1,7 @@
 Documentation : Déploiement d’APIs sur Kong Konnect avec Terraform
 
 
-1️⃣ Introduction
+1️⃣ **Introduction**
 
 Terraform est un outil d’Infrastructure as Code (IaC) qui permet de :
 
@@ -36,7 +36,7 @@ Kong Konnect est une plateforme de gestion d’APIs qui permet de :
 
 
 
-2️⃣ Prérequis
+2️⃣ **Prérequis**
 
 Avant de commencer, vous devez avoir :
 
@@ -57,7 +57,7 @@ export TF_VAR_konnect_personal_access_token="votre_token"
 export TF_VAR_control_plane_id="votre_control_plane_id"
 
 
-3️⃣ Variables Terraform
+3️⃣ ***Variables Terraform***
 
 Pour sécuriser les identifiants et mots de passe, utilisez des variables sensibles :
 
@@ -78,7 +78,7 @@ variable "atalaku_password" { type = string, sensitive = true }
 Ces variables permettent de masquer vos secrets dans Terraform et Git.
 
 
-4️⃣ Déploiement des Services
+4️⃣ ***Déploiement des Services***
 
 Les services représentent vos APIs backend exposées par Kong.
 
@@ -113,7 +113,7 @@ resource "konnect_gateway_service" "httpbun" {
 }
 
 
-5️⃣ Déploiement des Routes
+5️⃣ ***Déploiement des Routes***
 
 Les routes définissent comment les requêtes HTTP/HTTPS sont acheminées vers vos services.
 
@@ -136,7 +136,7 @@ Chaque route est liée à un service.
 
 
 
-6️⃣ Upstreams
+6️⃣ ***Upstreams***
 
 Les upstreams permettent le load balancing entre plusieurs instances backend.
 
@@ -150,7 +150,7 @@ resource "konnect_gateway_upstream" "httpbun" {
   use_srv_name     = false
 }
 
-7️⃣ Consumers et Groupes
+7️⃣ ***Consumers et Groupes***
 Consumers
 resource "konnect_gateway_consumer" "kassongo_user" {
   control_plane_id = var.control_plane_id
@@ -177,7 +177,7 @@ resource "konnect_gateway_consumer_group_member" "kassongo_group_member" {
 
 Les groupes permettent de grouper les consumers pour appliquer des ACL.
 
-8️⃣ Plugins
+8️⃣ ***Plugins***
 Key Auth
 resource "konnect_gateway_plugin_key_auth" "gateway_plugin_keyauth" {
   service = { id = konnect_gateway_service.Kassongo_service.id }
@@ -238,7 +238,7 @@ resource "konnect_gateway_plugin_openid_connect" "openid_connect" {
   }
 }
 
-9️⃣ Bonnes pratiques
+9️⃣ ***Bonnes pratiques***
 
 Stockez les secrets dans des variables Terraform.
 
