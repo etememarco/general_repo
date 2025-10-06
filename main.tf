@@ -42,7 +42,7 @@ resource "konnect_gateway_route" "Kassongo_route_anything" {
     id = var.kassongo_service_id
   }
 
-  strip_path          = true
+  strip_path = true
   tags = [
     "env: uat"
   ]
@@ -66,13 +66,13 @@ resource "konnect_gateway_route" "Kassongo_route_bearer" {
   protocols = [
     "http", "https"
   ]
-  regex_priority      = 9
-  request_buffering   = true
-  response_buffering  = true
+  regex_priority     = 9
+  request_buffering  = true
+  response_buffering = true
   service = {
     id = var.kassongo_service_id
   }
-  strip_path          = true
+  strip_path = true
   tags = [
     "env: uat"
   ]
