@@ -249,3 +249,8 @@ Testez d’abord sur un environnement UAT.
 Organisez services, consumers et plugins par environnement (uat, prod).
 
 Activez uniquement les plugins nécessaires pour optimiser les performances.
+<<<<<<< HEAD
+=======
+
+Toujours garder le Terraform state hors du repo git distant pour éviter d'exposer les valeurs sensibles
+>>>>>>> 703e47d (updates)
