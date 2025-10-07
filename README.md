@@ -74,7 +74,7 @@ variable "client_secret" {
 
 
 
-Ces variables permettent de masquer les secrets dans Terraform et Git.
+***Ces variables permettent de masquer les secrets dans Terraform et Git.***
 
 
 4️⃣ ***Déploiement des Services***
@@ -86,7 +86,7 @@ resource "konnect_gateway_service" "Kassongo_service" {
   control_plane_id = var.control_plane_id
   name             = "Kassongo_service"
   host             = "httpbin.org"
-  port             = 443
+  port             = 443 
   protocol         = "https"
   enabled          = true
   connect_timeout  = 60000
