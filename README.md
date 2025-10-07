@@ -25,7 +25,8 @@ Kong Konnect est une plateforme de gestion d’APIs qui permet de :
 
 - Gérer des consumers et des groupes de consumers pour le contrôle d’accès
 
-- Cette documentation explique comment utiliser Terraform pour automatiser :
+
+Cette documentation explique comment utiliser Terraform pour automatiser :
 
 - La création de services et routes
 
@@ -58,7 +59,7 @@ Variables d’environnement configurées pour Terraform en local :
 - export TF_VAR_control_plane_id="votre_control_plane_id"
 
 
-3️⃣ ***Variables Terraform***
+3️⃣ **Variables Terraform**
 
 Pour sécuriser les identifiants et mots de passe, il faut utiliser des variables sensibles sous cette forme  :
 
@@ -74,7 +75,7 @@ variable "client_secret" {
 
 
 
-***Ces variables permettent de masquer les secrets dans Terraform et Git.***
+*Ces variables permettent de masquer les secrets dans Terraform et Git.*
 
 
 4️⃣ ***Déploiement des Services***
@@ -129,7 +130,7 @@ resource "konnect_gateway_route" "Kassongo_route_anything" {
 }
 
 
-Répétez pour chaque route (/bearer, /payload, /run, /mix).
+Il faudra répeter pour chaque route (/bearer, /payload, /run, /mix).
 
 Chaque route est liée à un service.
 
@@ -158,7 +159,7 @@ resource "konnect_gateway_consumer" "kassongo_user" {
 }
 
 
-Créez tous vos consumers (demo-user, katika, atalaku) de la même façon.
+Créez tous les consommateurs (ex: demo-user, katika, atalaku) de la même façon.
 
 Consumer Groups
 resource "konnect_gateway_consumer_group" "kassongo_group" {
@@ -174,7 +175,7 @@ resource "konnect_gateway_consumer_group_member" "kassongo_group_member" {
 }
 
 
-Les groupes permettent de grouper les consumers pour appliquer des ACL.
+Les groupes permettent de grouper les consommateurs pour appliquer des ACL.
 
 8️⃣ ***Plugins***
 Key Auth
@@ -253,3 +254,138 @@ resource "konnect_gateway_plugin_openid_connect" "openid_connect" {
 git rm --cached terraform.tfstate
 git rm --cached terraform.tfstate.backup
 
+
+
+
+-
+-
+-
+
+
+**Commandes Terraform importantes pour gérer l’infrastructure Kong Konnect**
+
+Terraform repose sur un cycle simple : définir, planifier, appliquer et détruire l’infrastructure.
+Voici les commandes essentielles à connaître, avec leur rôle spécifique dans la gestion de Kong.
+
+🧱 terraform init
+terraform init
+
+
+Initialise le projet Terraform.
+
+Télécharge le provider Kong Konnect et les modules nécessaires.
+
+Prépare le dossier .terraform/.
+
+À exécuter une seule fois lors de la première configuration ou après modification du provider.
+
+💡 Exemple : après avoir ajouté une nouvelle ressource comme konnect_gateway_plugin_basic_auth, exécute terraform init pour que Terraform la prenne en compte.
+
+🔍 terraform validate
+- terraform validate
+
+
+Vérifie la validité de la configuration .tf.
+
+Détecte les erreurs de syntaxe ou les variables manquantes.
+
+Ne contacte pas Kong, c’est une vérification locale.
+
+🧩 terraform plan
+- terraform plan
+
+
+Prépare un plan d’exécution.
+
+Compare la configuration actuelle dans les fichiers .tf avec celle du Terraform state (ou du backend distant).
+
+Montre ce que Terraform va créer, modifier ou supprimer.
+
+💡 Exemple :
+
++ konnect_gateway_service.Kassongo_service (sera créé)
+~ konnect_gateway_plugin_basic_auth.kassongo_basic_auth (sera modifié)
+- konnect_gateway_consumer.old_user (sera supprimé)
+
+
+🧠 Bon réflexe : toujours exécuter terraform plan avant un apply pour éviter de détruire une ressource Kong par erreur.
+
+⚙️ terraform apply
+- terraform apply
+
+
+Applique le plan et déploie les changements sur ton Control Plane Kong.
+
+Crée les services, routes, consumers, upstreams et plugins configurés.
+
+Met à jour le terraform.tfstate.
+
+🔹 Option utile :
+
+terraform apply -auto-approve
+
+
+➡️ Exécute sans confirmation (à utiliser avec prudence, souvent dans les pipelines CI/CD).
+
+💡 Exemple :
+
+- terraform apply -auto-approve
+
+
+Déploie automatiquement tes nouvelles routes /anything et /payload sur le service Kassongo.
+
+🧾 terraform show
+- terraform show
+
+
+Affiche l’état actuel des ressources dans le terraform.tfstate.
+
+Permet de visualiser les IDs, noms et configurations déployées sur Kong.
+
+🧮 terraform output
+- terraform output
+
+
+Affiche les valeurs de sortie définies dans outputs.tf (par ex. l’ID d’un service ou d’un consumer).
+
+Très pratique pour récupérer automatiquement des identifiants après déploiement.
+
+🧰 terraform state
+terraform state list
+terraform state show konnect_gateway_service.Kassongo_service
+
+
+Inspecte ou manipule manuellement le Terraform state.
+
+list : affiche toutes les ressources suivies.
+
+show : affiche les détails d’une ressource spécifique.
+
+💡 Exemple :
+
+terraform state list
+
+
+te montre tous les services, routes et plugins actuellement gérés par Terraform sur ton Control Plane.
+
+🧨 terraform destroy
+- terraform destroy
+
+
+Supprime toutes les ressources gérées par Terraform.
+
+⚠️ Attention : cela supprime aussi les services, routes, consumers et plugins du Control Plane Kong.
+
+Utiliser uniquement :
+
+En environnement de test / UAT.
+
+Ou pour réinitialiser entièrement la configuration.
+
+🧠 Bonnes pratiques Terraform pour Kong Konnect
+
+✅ Toujours exécuter terraform plan avant terraform apply.
+✅ Ne jamais versionner terraform.tfstate ni .terraform/ (ajoute-les à .gitignore).
+✅ Teste d’abord sur un environnement UAT avant la production.
+✅ Utilise des variables sensibles pour masquer les secrets (sensitive = true).
+✅ Si plusieurs environnements (dev, uat, prod), crée des workspaces Terraform pour isoler les états.
