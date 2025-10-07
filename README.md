@@ -25,7 +25,8 @@ Kong Konnect est une plateforme de gestion d’APIs qui permet de :
 
 - Gérer des consumers et des groupes de consumers pour le contrôle d’accès
 
-- Cette documentation explique comment utiliser Terraform pour automatiser :
+
+Cette documentation explique comment utiliser Terraform pour automatiser :
 
 - La création de services et routes
 
@@ -58,7 +59,7 @@ Variables d’environnement configurées pour Terraform en local :
 - export TF_VAR_control_plane_id="votre_control_plane_id"
 
 
-3️⃣ ***Variables Terraform***
+3️⃣ **Variables Terraform**
 
 Pour sécuriser les identifiants et mots de passe, il faut utiliser des variables sensibles sous cette forme  :
 
@@ -74,7 +75,7 @@ variable "client_secret" {
 
 
 
-***Ces variables permettent de masquer les secrets dans Terraform et Git.***
+*Ces variables permettent de masquer les secrets dans Terraform et Git.*
 
 
 4️⃣ ***Déploiement des Services***
@@ -129,7 +130,7 @@ resource "konnect_gateway_route" "Kassongo_route_anything" {
 }
 
 
-Répétez pour chaque route (/bearer, /payload, /run, /mix).
+Il faudra répeter pour chaque route (/bearer, /payload, /run, /mix).
 
 Chaque route est liée à un service.
 
@@ -158,7 +159,7 @@ resource "konnect_gateway_consumer" "kassongo_user" {
 }
 
 
-Créez tous vos consumers (demo-user, katika, atalaku) de la même façon.
+Créez tous les consommateurs (ex: demo-user, katika, atalaku) de la même façon.
 
 Consumer Groups
 resource "konnect_gateway_consumer_group" "kassongo_group" {
@@ -174,7 +175,7 @@ resource "konnect_gateway_consumer_group_member" "kassongo_group_member" {
 }
 
 
-Les groupes permettent de grouper les consumers pour appliquer des ACL.
+Les groupes permettent de grouper les consommateurs pour appliquer des ACL.
 
 8️⃣ ***Plugins***
 Key Auth
@@ -256,6 +257,9 @@ git rm --cached terraform.tfstate.backup
 
 
 
+-
+-
+-
 
 
 **Commandes Terraform importantes pour gérer l’infrastructure Kong Konnect**
