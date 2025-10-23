@@ -1,6 +1,6 @@
-# 📘 Documentation: Deploying APIs on **Kong Konnect** with **Terraform**
+#  Documentation: Deploying APIs on **Kong Konnect** with **Terraform**
 
-## 1️⃣ Introduction
+## 1- Introduction
 **Terraform** is an Infrastructure as Code (IaC) tool that allows you to:
 - Describe your infrastructure using text files (`.tf`)
 - Automate the deployment and configuration of services
@@ -19,7 +19,7 @@ This documentation explains how to use **Terraform** to automate:
 - The creation of **consumers** and **consumer groups**
 - The activation of **security and control plugins**
 
-## 2️⃣ Prerequisites
+## 2-  Prerequisites
 Before starting, make sure you have:
 - Terraform installed (v1.5 or higher)
   ```bash
@@ -35,7 +35,7 @@ export TF_VAR_konnect_personal_access_token="your_token"
 export TF_VAR_control_plane_id="your_control_plane_id"
 ```
 
-## 3️⃣ Terraform Variables
+## 3- Terraform Variables
 To secure credentials and passwords, use **sensitive variables** like this:
 ```hcl
 variable "client_id" {
@@ -49,7 +49,7 @@ variable "client_secret" {
 ```
 These variables ensure secrets remain hidden in Terraform logs and Git.
 
-## 4️⃣ Deploying Services
+## 4- Deploying Services
 **Services** represent the backend APIs exposed through Kong.
 Example:
 ```hcl
@@ -68,7 +68,7 @@ resource "konnect_gateway_service" "Kassongo_service" {
 }
 ```
 
-## 5️⃣ Deploying Routes
+## 5- Deploying Routes
 **Routes** define how HTTP/HTTPS requests are forwarded to services.
 ```hcl
 resource "konnect_gateway_route" "Kassongo_route_anything" {
@@ -86,7 +86,7 @@ resource "konnect_gateway_route" "Kassongo_route_anything" {
 }
 ```
 
-## 6️⃣ Upstreams
+## 6- Upstreams
 **Upstreams** enable load balancing across multiple backend instances.
 ```hcl
 resource "konnect_gateway_upstream" "httpbun" {
@@ -100,7 +100,7 @@ resource "konnect_gateway_upstream" "httpbun" {
 }
 ```
 
-## 7️⃣ Consumers and Groups
+## 7- Consumers and Groups
 **Consumers:**
 ```hcl
 resource "konnect_gateway_consumer" "kassongo_user" {
@@ -118,7 +118,7 @@ resource "konnect_gateway_consumer_group" "kassongo_group" {
 }
 ```
 
-## 8️⃣ Plugins
+## 8- Plugins
 ### Key Auth
 ```hcl
 resource "konnect_gateway_plugin_key_auth" "gateway_plugin_keyauth" {
@@ -167,7 +167,7 @@ resource "konnect_gateway_plugin_rate_limiting_advanced" "gateway_plugin_rate_li
 }
 ```
 
-## 9️⃣ Terraform Commands
+## 9- Terraform Commands
 ### terraform init
 Initializes the Terraform project.
 
@@ -180,7 +180,7 @@ Applies configuration to deploy/update infrastructure.
 ### terraform destroy
 Destroys all managed resources.
 
-## 🔒 Best Practices
+##  Best Practices
 - Always run `terraform plan` before `apply`.
 - Never commit `terraform.tfstate` or `.terraform/`.
 - Use workspaces for different environments (dev, uat, prod).

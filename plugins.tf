@@ -84,7 +84,7 @@ resource "konnect_gateway_plugin_basic_auth" "basicauth" {
 resource "konnect_gateway_plugin_basic_auth" "kassongo_basic_auth" {
   control_plane_id = var.control_plane_id
   created_at       = 6
-  enabled          = true
+  enabled          = false
   instance_name    = "kassongo_basic_auth"
   protocols        = ["http", "https"]
   service          = { id = konnect_gateway_service.Kassongo_service.id }
